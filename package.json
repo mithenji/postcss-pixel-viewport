@@ -47,11 +47,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-org/postcss-pixel-viewport.git"
+    "url": "git@github.com:mithenji/postcss-pixel-viewport.git"
   },
-  "homepage": "https://github.com/your-org/postcss-pixel-viewport#readme",
+  "homepage": "https://github.com/mithenji/postcss-pixel-viewport#readme",
   "bugs": {
-    "url": "https://github.com/your-org/postcss-pixel-viewport/issues"
+    "url": "https://github.com/mithenji/postcss-pixel-viewport/issues"
   },
   "publishConfig": {
     "access": "public",
