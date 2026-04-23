@@ -38,7 +38,7 @@ npm version patch
 git push --follow-tags
 ```
 
-If npm Trusted Publishing cannot be configured before the package exists on npm, publish the first version manually with `npm publish --access public --provenance`, then configure Trusted Publishing immediately afterward.
+If npm Trusted Publishing cannot be configured before the package exists on npm, publish the first version manually with `npm publish --access public`, then configure Trusted Publishing immediately afterward. Local publishing cannot generate provenance because it does not run inside a supported OIDC provider. npm requires either account-level 2FA or a granular access token with bypass 2FA enabled before it accepts a package publish.
 
 ## GitHub Actions Release
 

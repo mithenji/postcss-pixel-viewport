@@ -47,15 +47,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mithenji/postcss-pixel-viewport.git"
+    "url": "git+ssh://git@github.com/mithenji/postcss-pixel-viewport.git"
   },
   "homepage": "https://github.com/mithenji/postcss-pixel-viewport#readme",
   "bugs": {
     "url": "https://github.com/mithenji/postcss-pixel-viewport/issues"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "scripts": {
     "build": "tsup && node scripts/fix-cjs.cjs",
