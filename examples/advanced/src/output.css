@@ -1,0 +1,23 @@
+.panel {
+  width: 375px;
+  width: 50vw;
+  font-size: 24px;
+  font-size: 3.2vh;
+  margin: 1px 12px;
+  margin: 1px 1.6vw;
+}
+
+.panel-title {
+  line-height: 32px;/*off*/
+}
+
+.no-scale {
+  width: 375px;
+}
+
+@media (min-width: 100vw) {
+  .panel {
+    padding: 30px;
+    padding: 4vw;
+  }
+}

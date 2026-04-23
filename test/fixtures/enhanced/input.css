@@ -1,0 +1,15 @@
+.card {
+  width: 100px;
+  --gap: 20px;
+  background: url("/asset/20px.png");
+}
+
+.legacy-card {
+  width: 100px;
+}
+
+@media (min-width: 500px) and (orientation: landscape) {
+  .card {
+    font-size: 20px;
+  }
+}

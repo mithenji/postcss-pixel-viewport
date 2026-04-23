@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "postcss src/input.css -o src/output.css --config ."
+  }
+}
