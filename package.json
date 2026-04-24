@@ -1,6 +1,6 @@
 {
   "name": "postcss-pixel-viewport",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A modern PostCSS 8+ plugin that converts pixel units into viewport-relative units.",
   "keywords": [
     "css",
