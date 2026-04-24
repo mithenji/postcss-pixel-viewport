@@ -18,5 +18,13 @@ export function isSelectorAllowed(
     return true;
   }
 
-  return !matchesAny(selector, options.selectorBlackList, { selector });
+  if (matchesAny(selector, options.selectorBlackList, { selector })) {
+    return false;
+  }
+
+  if (options.selectorAllowList) {
+    return matchesAny(selector, options.selectorAllowList, { selector });
+  }
+
+  return true;
 }

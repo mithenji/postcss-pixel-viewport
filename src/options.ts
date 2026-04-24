@@ -1,6 +1,11 @@
 import { DEFAULT_OPTIONS } from './defaults';
 import type { NormalizedOptions, NormalizeResult } from './types/internal';
-import type { ConversionSettings, Options } from './types/public';
+import type {
+  ConversionSettings,
+  Options,
+  OverrideRule,
+  PixelViewportWarning
+} from './types/public';
 import { matchesAny } from './utils/match';
 import { normalizePath } from './utils/path';
 import { warning } from './warnings';
@@ -14,13 +19,14 @@ const NORMALIZED_KEYS = [
   'propList',
   'propertyBlacklist',
   'selectorBlackList',
+  'selectorAllowList',
   'minPixelValue',
   'mediaQuery',
   'replace',
   'enableConvertComment',
   'disableConvertComment',
-  'include',
-  'exclude',
+  'includeFiles',
+  'excludeFiles',
   'overrides',
   'conversionMap',
   'orientation',
@@ -45,10 +51,11 @@ const OVERRIDE_KEYS = [
   'propList',
   'propertyBlacklist',
   'selectorBlackList',
+  'selectorAllowList',
   'minPixelValue',
   'mediaQuery',
-  'include',
-  'exclude',
+  'includeFiles',
+  'excludeFiles',
   'ignoreValues',
   'ignoreFunctions',
   'ignoreProps',
@@ -57,7 +64,7 @@ const OVERRIDE_KEYS = [
 ] as const;
 
 export function normalizeOptions(rawOptions: Options = {}): NormalizeResult {
-  const warnings = [];
+  const warnings: PixelViewportWarning[] = [];
   const raw = { ...rawOptions };
 
   if (raw.propertyBlackList !== undefined) {
@@ -105,6 +112,44 @@ export function normalizeOptions(rawOptions: Options = {}): NormalizeResult {
     }
   }
 
+  normalizeAlias(raw, warnings, {
+    alias: 'include',
+    target: 'includeFiles',
+    aliasLabel: '`include`',
+    targetLabel: '`includeFiles`',
+    suggestion: 'Rename `include` to `includeFiles`.'
+  });
+
+  normalizeAlias(raw, warnings, {
+    alias: 'exclude',
+    target: 'excludeFiles',
+    aliasLabel: '`exclude`',
+    targetLabel: '`excludeFiles`',
+    suggestion: 'Rename `exclude` to `excludeFiles`.'
+  });
+
+  normalizeAlias(raw, warnings, {
+    alias: 'selectorWhitelist',
+    target: 'selectorAllowList',
+    aliasLabel: '`selectorWhitelist`',
+    targetLabel: '`selectorAllowList`',
+    suggestion: 'Rename `selectorWhitelist` to `selectorAllowList`.'
+  });
+
+  normalizeAlias(raw, warnings, {
+    alias: 'selectorWhiteList',
+    target: 'selectorAllowList',
+    aliasLabel: '`selectorWhiteList`',
+    targetLabel: '`selectorAllowList`',
+    suggestion: 'Rename `selectorWhiteList` to `selectorAllowList`.'
+  });
+
+  if (raw.overrides) {
+    raw.overrides = raw.overrides.map((override, index) =>
+      normalizeOverrideRule(override, warnings, index)
+    );
+  }
+
   const orientation = normalizeOrientation(raw);
 
   const options: NormalizedOptions = {
@@ -130,11 +175,14 @@ export function shouldProcessFile(
   const normalizedFile = normalizePath(file);
   const context = { file: normalizedFile };
 
-  if (options.include && !matchesAny(normalizedFile, options.include, context)) {
+  if (
+    options.includeFiles &&
+    !matchesAny(normalizedFile, options.includeFiles, context)
+  ) {
     return false;
   }
 
-  if (options.exclude && matchesAny(normalizedFile, options.exclude, context)) {
+  if (options.excludeFiles && matchesAny(normalizedFile, options.excludeFiles, context)) {
     return false;
   }
 
@@ -154,11 +202,11 @@ export function resolveOptionsForFile(
 
   for (const override of options.overrides) {
     const context = { file: normalizedFile };
-    const included = override.include
-      ? matchesAny(normalizedFile, override.include, context)
+    const included = override.includeFiles
+      ? matchesAny(normalizedFile, override.includeFiles, context)
       : true;
-    const excluded = override.exclude
-      ? matchesAny(normalizedFile, override.exclude, context)
+    const excluded = override.excludeFiles
+      ? matchesAny(normalizedFile, override.excludeFiles, context)
       : false;
 
     if (included && !excluded) {
@@ -189,6 +237,89 @@ function normalizeOrientation(raw: Options): NormalizedOptions['orientation'] {
       ...landscapeSettings
     }
   };
+}
+
+type AliasRule<T extends object> = {
+  alias: keyof T;
+  target: keyof T;
+  aliasLabel: string;
+  targetLabel: string;
+  suggestion: string;
+};
+
+function normalizeAlias<T extends object>(
+  raw: T,
+  warnings: NormalizeResult['warnings'],
+  rule: AliasRule<T>
+): void {
+  const aliasValue = raw[rule.alias];
+  if (aliasValue === undefined) {
+    return;
+  }
+
+  warnings.push(
+    warning(
+      'deprecated-option',
+      `${rule.aliasLabel} is deprecated. Use ${rule.targetLabel} instead.`,
+      {
+        option: String(rule.alias),
+        suggestion: rule.suggestion
+      }
+    )
+  );
+
+  if (raw[rule.target] === undefined) {
+    raw[rule.target] = aliasValue;
+  } else {
+    warnings.push(
+      warning(
+        'conflicting-option',
+        `${rule.targetLabel} and deprecated ${rule.aliasLabel} were both provided. ${rule.targetLabel} wins.`,
+        {
+          option: String(rule.alias),
+          suggestion: `Keep only ${rule.targetLabel}.`
+        }
+      )
+    );
+  }
+}
+
+function normalizeOverrideRule(
+  override: OverrideRule,
+  warnings: NormalizeResult['warnings'],
+  index: number
+): OverrideRule {
+  const normalized = { ...override };
+  normalizeAlias(normalized, warnings, {
+    alias: 'include',
+    target: 'includeFiles',
+    aliasLabel: `overrides[${index}].include`,
+    targetLabel: `overrides[${index}].includeFiles`,
+    suggestion: `Rename overrides[${index}].include to overrides[${index}].includeFiles.`
+  });
+  normalizeAlias(normalized, warnings, {
+    alias: 'exclude',
+    target: 'excludeFiles',
+    aliasLabel: `overrides[${index}].exclude`,
+    targetLabel: `overrides[${index}].excludeFiles`,
+    suggestion: `Rename overrides[${index}].exclude to overrides[${index}].excludeFiles.`
+  });
+  normalizeAlias(normalized, warnings, {
+    alias: 'selectorWhitelist',
+    target: 'selectorAllowList',
+    aliasLabel: `overrides[${index}].selectorWhitelist`,
+    targetLabel: `overrides[${index}].selectorAllowList`,
+    suggestion: `Rename overrides[${index}].selectorWhitelist to overrides[${index}].selectorAllowList.`
+  });
+  normalizeAlias(normalized, warnings, {
+    alias: 'selectorWhiteList',
+    target: 'selectorAllowList',
+    aliasLabel: `overrides[${index}].selectorWhiteList`,
+    targetLabel: `overrides[${index}].selectorAllowList`,
+    suggestion: `Rename overrides[${index}].selectorWhiteList to overrides[${index}].selectorAllowList.`
+  });
+
+  return normalized;
 }
 
 function pickDefined<T extends object, K extends readonly (keyof T)[]>(

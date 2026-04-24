@@ -38,14 +38,44 @@ describe('filters', () => {
     expect(isSelectorAllowed('.legacy', options)).toBe(false);
   });
 
-  it('matches include and exclude paths cross-platform', () => {
+  it('matches selector allow lists after blacklists', () => {
     const { options } = normalizeOptions({
-      include: ['src/components'],
-      exclude: [/\.legacy\.css$/]
+      selectorAllowList: ['.mobile', /^\.responsive-/],
+      selectorBlackList: ['.mobile-ignore']
+    });
+
+    expect(isSelectorAllowed('.mobile .card', options)).toBe(true);
+    expect(isSelectorAllowed('.responsive-card', options)).toBe(true);
+    expect(isSelectorAllowed('.desktop .card', options)).toBe(false);
+    expect(isSelectorAllowed('.mobile-ignore .card', options)).toBe(false);
+  });
+
+  it('matches includeFiles and excludeFiles paths cross-platform', () => {
+    const { options } = normalizeOptions({
+      includeFiles: ['src/components'],
+      excludeFiles: [/\.legacy\.css$/]
     });
 
     expect(isFileAllowed(options, 'src\\components\\button.css')).toBe(true);
     expect(isFileAllowed(options, 'src/components/button.legacy.css')).toBe(false);
     expect(isFileAllowed(options, 'src/pages/index.css')).toBe(false);
+  });
+
+  it('keeps deprecated file and selector aliases working', () => {
+    const { options, warnings } = normalizeOptions({
+      include: 'src',
+      exclude: 'vendor',
+      selectorWhitelist: '.mobile'
+    });
+
+    expect(warnings.map((item) => item.option)).toEqual([
+      'include',
+      'exclude',
+      'selectorWhitelist'
+    ]);
+    expect(isFileAllowed(options, 'src/button.css')).toBe(true);
+    expect(isFileAllowed(options, 'vendor/button.css')).toBe(false);
+    expect(isSelectorAllowed('.mobile-card', options)).toBe(true);
+    expect(isSelectorAllowed('.desktop-card', options)).toBe(false);
   });
 });

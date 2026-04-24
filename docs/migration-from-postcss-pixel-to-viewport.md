@@ -90,12 +90,12 @@ pixelViewport({
 });
 ```
 
-Use `include` and `exclude` to avoid transforming third-party CSS:
+Use `includeFiles` and `excludeFiles` to avoid transforming third-party CSS:
 
 ```js
 pixelViewport({
-  include: 'src',
-  exclude: ['node_modules', /\.legacy\.css$/]
+  includeFiles: 'src',
+  excludeFiles: ['node_modules', /\.legacy\.css$/]
 });
 ```
 
@@ -106,7 +106,7 @@ pixelViewport({
   viewportWidth: 750,
   overrides: [
     {
-      include: 'src/desktop',
+      includeFiles: 'src/desktop',
       viewportWidth: 1440,
       viewportUnit: 'vw'
     }
@@ -123,4 +123,4 @@ pixelViewport({
    - `@media` params stay unchanged unless `mediaQuery: true`.
    - `/*on*/` and `/*off*/` comments are trailing declaration comments.
    - `propertyBlacklist` strings match by substring.
-4. Move newly written config toward `propList`, `include`, `exclude`, and `overrides`.
+4. Move newly written config toward `propList`, `includeFiles`, `excludeFiles`, `selectorAllowList`, and `overrides`.

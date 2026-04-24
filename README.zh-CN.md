@@ -206,21 +206,27 @@ npx postcss src/input.css -o dist/output.css
 | `propertyBlacklist` | `[]` | 旧库属性黑名单。字符串为包含匹配，正则为 `test`。 |
 | `propertyBlackList` | 无 | 历史 typo 别名，会通过 PostCSS warning 提醒迁移。 |
 | `selectorBlackList` | `[]` | 选择器黑名单。字符串为包含匹配，正则为 `test`。 |
+| `selectorBlacklist` | 无 | `selectorBlackList` 的现代拼写别名，会通过 PostCSS warning 提醒迁移。 |
 | `minPixelValue` | `2` | 绝对值小于等于该阈值时不转换。 |
 | `mediaQuery` | `false` | 是否转换 `@media` 参数里的 px。 |
 | `replace` | `true` | 直接替换原声明。为 false 时在原声明后追加转换声明。 |
 | `enableConvertComment` | `'on'` | 声明后紧邻注释，强制转换该声明。 |
 | `disableConvertComment` | `'off'` | 声明后紧邻注释，禁用该声明转换。 |
 
-属性过滤优先级为：文件 include/exclude、选择器黑名单、自定义属性策略、`/*off*/`、`/*on*/`、`propList`、`propertyBlacklist`、`ignoreProps`。其中 `/*on*/` 会绕过属性过滤，用于兼容旧库用法。
+过滤优先级为：文件 `includeFiles`/`excludeFiles`、选择器黑名单、选择器白名单、自定义属性策略、`/*off*/`、`/*on*/`、`propList`、`propertyBlacklist`、`ignoreProps`。其中 `/*on*/` 会绕过属性过滤，用于兼容旧库用法。
 
 ## 增强配置项
 
 | 配置项 | 默认值 | 稳定性 | 说明 |
 | --- | --- | --- | --- |
-| `include` | 无 | stable | 只处理匹配文件。支持字符串、正则、函数或数组。 |
-| `exclude` | 无 | stable | 跳过匹配文件。支持字符串、正则、函数或数组。 |
+| `includeFiles` | 无 | stable | 只处理匹配文件。支持字符串、正则、函数或数组。 |
+| `excludeFiles` | 无 | stable | 跳过匹配文件。支持字符串、正则、函数或数组。 |
+| `include` | 无 | deprecated | `includeFiles` 的别名，会通过 PostCSS warning 提醒迁移。 |
+| `exclude` | 无 | deprecated | `excludeFiles` 的别名，会通过 PostCSS warning 提醒迁移。 |
 | `overrides` | `[]` | stable | 按文件覆盖配置，适合不同目录使用不同设计稿宽度。 |
+| `selectorAllowList` | 无 | stable | 只转换匹配的选择器；黑名单仍然优先。 |
+| `selectorWhitelist` | 无 | deprecated | `selectorAllowList` 的别名，会通过 PostCSS warning 提醒迁移。 |
+| `selectorWhiteList` | 无 | deprecated | `selectorAllowList` 的别名，会通过 PostCSS warning 提醒迁移。 |
 | `conversionMap` | 无 | advanced | 添加额外源单位转换，例如 `rpx -> vw`。 |
 | `landscape` | `false` | advanced | landscape 方向配置简写，`true` 使用 `vw`。 |
 | `orientation` | 无 | advanced | 根据 media query 中的方向设置转换参数。 |
@@ -263,7 +269,7 @@ npx postcss src/input.css -o dist/output.css
 
 ### 如何跳过目录？
 
-使用 `exclude: 'vendor'`、`exclude: /node_modules/` 或 matcher 函数。
+使用 `excludeFiles: 'vendor'`、`excludeFiles: /node_modules/` 或 matcher 函数。
 
 ### warning 在哪里看？
 

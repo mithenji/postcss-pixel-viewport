@@ -8,11 +8,11 @@ module.exports = {
       fontViewportUnit: 'vh',
       mediaQuery: true,
       replace: false,
-      include: 'examples/advanced',
+      includeFiles: 'examples/advanced',
       selectorBlackList: ['.no-scale'],
       overrides: [
         {
-          include: 'desktop',
+          includeFiles: 'desktop',
           viewportWidth: 1440
         }
       ],

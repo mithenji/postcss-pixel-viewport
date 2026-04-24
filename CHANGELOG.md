@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-04-24
+
+### Added
+
+- Added `includeFiles` and `excludeFiles` as the preferred file/path filtering options.
+- Added `selectorAllowList` for selector-level allow-list filtering.
+- Added compatibility aliases for `selectorWhitelist` and `selectorWhiteList`.
+
+### Changed
+
+- Deprecated `include` and `exclude` in favor of `includeFiles` and `excludeFiles`, while preserving backwards-compatible behavior with PostCSS warnings.
+- Updated English, Chinese, and migration documentation for the clearer file filter names and selector allow-list behavior.
+
 ## [0.1.2] - 2026-04-24
 
 ### Fixed

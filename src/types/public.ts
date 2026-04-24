@@ -50,13 +50,30 @@ export type ConversionMapEntry = ConversionSettings & {
 export type ConversionMap = Record<string, ViewportUnit | ConversionMapEntry>;
 
 export type OverrideRule = ConversionSettings & {
+  includeFiles?: MatcherInput;
+  excludeFiles?: MatcherInput;
+  /**
+   * Deprecated alias for `includeFiles`.
+   */
   include?: MatcherInput;
+  /**
+   * Deprecated alias for `excludeFiles`.
+   */
   exclude?: MatcherInput;
   unitToConvert?: string;
   mediaQuery?: boolean;
   propList?: PropList;
   propertyBlacklist?: MatcherInput;
   selectorBlackList?: MatcherInput;
+  selectorAllowList?: MatcherInput;
+  /**
+   * Deprecated alias for `selectorAllowList`.
+   */
+  selectorWhitelist?: MatcherInput;
+  /**
+   * Deprecated alias for `selectorAllowList`.
+   */
+  selectorWhiteList?: MatcherInput;
   ignoreProps?: MatcherInput;
   ignoreValues?: MatcherInput;
   ignoreFunctions?: MatcherInput;
@@ -115,18 +132,35 @@ export type Options = ConversionSettings & {
   propertyBlackList?: MatcherInput;
 
   selectorBlackList?: MatcherInput;
+  selectorAllowList?: MatcherInput;
 
   /**
    * Modern spelling alias. Supported with a deprecation warning because the
    * historical PostCSS ecosystem option uses selectorBlackList.
    */
   selectorBlacklist?: MatcherInput;
+  /**
+   * Deprecated alias for `selectorAllowList`.
+   */
+  selectorWhitelist?: MatcherInput;
+  /**
+   * Deprecated alias for `selectorAllowList`.
+   */
+  selectorWhiteList?: MatcherInput;
 
   mediaQuery?: boolean;
   replace?: boolean;
   enableConvertComment?: string | false;
   disableConvertComment?: string | false;
+  includeFiles?: MatcherInput;
+  excludeFiles?: MatcherInput;
+  /**
+   * Deprecated alias for `includeFiles`.
+   */
   include?: MatcherInput;
+  /**
+   * Deprecated alias for `excludeFiles`.
+   */
   exclude?: MatcherInput;
   overrides?: OverrideRule[];
   conversionMap?: ConversionMap;

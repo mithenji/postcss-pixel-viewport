@@ -222,21 +222,27 @@ npx postcss src/input.css -o dist/output.css
 | `propertyBlacklist` | `[]` | Legacy property blacklist. Strings use substring matching; regexes use `test`. |
 | `propertyBlackList` | none | Deprecated typo alias for `propertyBlacklist`; emits a PostCSS warning. |
 | `selectorBlackList` | `[]` | Selector blacklist. Strings use substring matching; regexes use `test`. |
+| `selectorBlacklist` | none | Modern spelling alias for `selectorBlackList`; emits a PostCSS warning. |
 | `minPixelValue` | `2` | Values with absolute pixel size <= this number are preserved. |
 | `mediaQuery` | `false` | Convert px units inside `@media` params when true. |
 | `replace` | `true` | Replace the original declaration. When false, append a converted clone after it. |
 | `enableConvertComment` | `'on'` | Trailing declaration comment that forces conversion for that declaration. |
 | `disableConvertComment` | `'off'` | Trailing declaration comment that disables conversion for that declaration. |
 
-Property filtering priority is: file include/exclude, selector blacklist, custom property policy, `/*off*/`, `/*on*/`, `propList`, `propertyBlacklist`, `ignoreProps`. The `/*on*/` directive intentionally bypasses property filters to match legacy usage.
+Filtering priority is: file `includeFiles`/`excludeFiles`, selector blacklist, selector allow list, custom property policy, `/*off*/`, `/*on*/`, `propList`, `propertyBlacklist`, `ignoreProps`. The `/*on*/` directive intentionally bypasses property filters to match legacy usage.
 
 ## Enhanced Options
 
 | Option | Default | Stability | Description |
 | --- | --- | --- | --- |
-| `include` | none | stable | Process only matching files. Accepts string, regex, function, or array. |
-| `exclude` | none | stable | Skip matching files. Accepts string, regex, function, or array. |
+| `includeFiles` | none | stable | Process only matching files. Accepts string, regex, function, or array. |
+| `excludeFiles` | none | stable | Skip matching files. Accepts string, regex, function, or array. |
+| `include` | none | deprecated | Alias for `includeFiles`; emits a PostCSS warning. |
+| `exclude` | none | deprecated | Alias for `excludeFiles`; emits a PostCSS warning. |
 | `overrides` | `[]` | stable | File-scoped option overrides. Useful for mobile/desktop CSS folders. |
+| `selectorAllowList` | none | stable | Convert only matching selectors. Blacklist rules still win. |
+| `selectorWhitelist` | none | deprecated | Alias for `selectorAllowList`; emits a PostCSS warning. |
+| `selectorWhiteList` | none | deprecated | Alias for `selectorAllowList`; emits a PostCSS warning. |
 | `conversionMap` | none | advanced | Add source unit conversion rules, for example `rpx -> vw`. |
 | `landscape` | `false` | advanced | Shorthand for landscape orientation settings. `true` uses `vw`. |
 | `orientation` | none | advanced | Per-orientation conversion settings inside media queries. |
@@ -279,7 +285,7 @@ The default `minPixelValue` is `2` for legacy compatibility. Set `minPixelValue:
 
 ### How do I skip a folder?
 
-Use `exclude: 'vendor'`, `exclude: /node_modules/`, or a matcher function.
+Use `excludeFiles: 'vendor'`, `excludeFiles: /node_modules/`, or a matcher function.
 
 ### How do I debug warnings?
 

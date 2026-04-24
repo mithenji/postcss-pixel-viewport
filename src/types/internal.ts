@@ -34,8 +34,9 @@ export type NormalizedOptions = Required<
 > & {
   propertyBlacklist: MatcherInput;
   selectorBlackList: MatcherInput;
-  include?: MatcherInput;
-  exclude?: MatcherInput;
+  selectorAllowList?: MatcherInput;
+  includeFiles?: MatcherInput;
+  excludeFiles?: MatcherInput;
   overrides: OverrideRule[];
   conversionMap?: ConversionMap;
   orientation?: OrientationOptions;

@@ -53,17 +53,18 @@ describe('postcss plugin integration', () => {
     );
   });
 
-  it('supports include, exclude, and overrides', async () => {
+  it('supports includeFiles, excludeFiles, selectorAllowList, and overrides', async () => {
     const css = '.a{width:75px;}';
 
     await expect(
       processCss(
         css,
         {
-          include: 'src',
+          includeFiles: 'src',
+          selectorAllowList: '.a',
           overrides: [
             {
-              include: 'src/mobile',
+              includeFiles: 'src/mobile',
               viewportWidth: 375,
               viewportUnit: 'vw'
             }
@@ -77,8 +78,8 @@ describe('postcss plugin integration', () => {
       processCss(
         css,
         {
-          include: 'src',
-          exclude: 'vendor'
+          includeFiles: 'src',
+          excludeFiles: 'vendor'
         },
         'vendor/button.css'
       )
