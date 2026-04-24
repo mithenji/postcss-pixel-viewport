@@ -1,0 +1,15 @@
+{
+  "name": "postcss-pixel-viewport-vite-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.0",
+    "postcss-pixel-viewport": "file:../..",
+    "vite": "^6.4.2"
+  }
+}

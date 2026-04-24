@@ -60,6 +60,7 @@
     "build": "tsup && node scripts/fix-cjs.cjs",
     "clean": "rimraf dist coverage",
     "dev": "tsup --watch",
+    "example:all": "npm run example:basic && npm run example:advanced",
     "example:advanced": "npm run build && postcss examples/advanced/src/input.css -o examples/advanced/src/output.css --config examples/advanced",
     "example:basic": "npm run build && postcss examples/basic/src/input.css -o examples/basic/src/output.css --config examples/basic",
     "format": "prettier --write .",

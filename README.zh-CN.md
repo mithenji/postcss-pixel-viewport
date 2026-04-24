@@ -1,6 +1,21 @@
 # postcss-pixel-viewport
 
+[![npm version](https://img.shields.io/npm/v/postcss-pixel-viewport?logo=npm)](https://www.npmjs.com/package/postcss-pixel-viewport)
+[![CI](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/ci.yml)
+[![Release](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/release.yml/badge.svg)](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/release.yml)
+[![License](https://img.shields.io/github/license/mithenji/postcss-pixel-viewport)](https://github.com/mithenji/postcss-pixel-viewport/blob/main/LICENSE)
+
 一个现代化、从零实现的 PostCSS 8+ 插件，用于把像素单位转换为 viewport 相对单位。它定位为旧库 `postcss-pixel-to-viewport` 的兼容替代和长期维护后继方案。
+
+简体中文 | [English](README.md)
+
+## 快速链接
+
+- [npm 包页](https://www.npmjs.com/package/postcss-pixel-viewport)
+- [示例总览](examples/README.md)
+- [Vite 可运行示例](playground/vite/README.md)
+- [迁移指南](docs/migration-from-postcss-pixel-to-viewport.md)
+- [更新日志](CHANGELOG.md)
 
 ## 环境要求
 
@@ -14,6 +29,14 @@
 ```sh
 npm install postcss-pixel-viewport postcss --save-dev
 ```
+
+## 示例
+
+- `npm run example:basic`：最小化 `postcss-cli` 示例，使用默认配置。
+- `npm run example:advanced`：演示 media query、声明后紧邻 `/*off*/` 注释和选择器过滤。
+- `cd playground/vite && npm install && npm run dev`：一个可直接运行的 Vite demo，按 390px 设计稿宽度转换。
+
+维护发布流程见 [docs/releasing.md](docs/releasing.md)。
 
 ## 基础用法
 

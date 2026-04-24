@@ -1,6 +1,21 @@
 # postcss-pixel-viewport
 
+[![npm version](https://img.shields.io/npm/v/postcss-pixel-viewport?logo=npm)](https://www.npmjs.com/package/postcss-pixel-viewport)
+[![CI](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/ci.yml)
+[![Release](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/release.yml/badge.svg)](https://github.com/mithenji/postcss-pixel-viewport/actions/workflows/release.yml)
+[![License](https://img.shields.io/github/license/mithenji/postcss-pixel-viewport)](https://github.com/mithenji/postcss-pixel-viewport/blob/main/LICENSE)
+
 A modern, zero-from-scratch PostCSS 8+ plugin that converts pixel units into viewport-relative units. It is designed as a drop-in replacement and long-term maintained successor to legacy pixel-to-viewport plugins, especially `postcss-pixel-to-viewport`.
+
+English | [简体中文](README.zh-CN.md)
+
+## Quick Links
+
+- [npm package](https://www.npmjs.com/package/postcss-pixel-viewport)
+- [Examples guide](examples/README.md)
+- [Vite playground](playground/vite/README.md)
+- [Migration guide](docs/migration-from-postcss-pixel-to-viewport.md)
+- [Changelog](CHANGELOG.md)
 
 ## Requirements
 
@@ -15,7 +30,13 @@ A modern, zero-from-scratch PostCSS 8+ plugin that converts pixel units into vie
 npm install postcss-pixel-viewport postcss --save-dev
 ```
 
-Release process: see [docs/releasing.md](docs/releasing.md).
+## Examples
+
+- `npm run example:basic`: minimal `postcss-cli` conversion with defaults.
+- `npm run example:advanced`: media queries, trailing `/*off*/` directives, and selector filtering.
+- `cd playground/vite && npm install && npm run dev`: a runnable Vite demo with a 390px design width.
+
+Maintainer docs: see [docs/releasing.md](docs/releasing.md).
 
 ## Basic Usage
 

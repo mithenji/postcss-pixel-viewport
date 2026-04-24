@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>postcss-pixel-viewport playground</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="intro-copy">
+        <p class="eyebrow">postcss-pixel-viewport</p>
+        <h1>Vite playground for a 390px mobile design width</h1>
+        <p class="lead">
+          Resize the viewport to see spacing and typography convert from px into vw.
+          The hairline border remains 1px, and one sentence intentionally opts out of conversion.
+        </p>
+      </section>
+
+      <section class="phone-frame">
+        <header class="hero hairline">
+          <p class="pill">Live PostCSS demo</p>
+          <h2>Pixel-based design tokens, viewport-based runtime output.</h2>
+          <p class="hero-copy">
+            The plugin keeps authoring simple while producing fluid CSS for small screens.
+          </p>
+
+          <div class="actions">
+            <a class="button button-primary" href="https://www.npmjs.com/package/postcss-pixel-viewport">View npm package</a>
+            <a class="button button-secondary" href="https://github.com/mithenji/postcss-pixel-viewport">Open repository</a>
+          </div>
+        </header>
+
+        <section class="content">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <p class="metric-value">390</p>
+              <p class="metric-label">design width</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-value">vw</p>
+              <p class="metric-label">target unit</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-value">1px</p>
+              <p class="metric-label">hairline kept</p>
+            </article>
+          </div>
+
+          <p class="annotation">
+            This line is converted normally and should scale with the viewport width.
+          </p>
+          <p class="annotation-fixed">
+            This line stays at 20px because of a trailing <code>/*off*/</code> comment.
+          </p>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
