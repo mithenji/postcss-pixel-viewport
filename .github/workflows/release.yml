@@ -8,18 +8,34 @@ on:
     inputs:
       tag:
         description: "Git tag to publish, for example v0.1.0"
-        required: false
+        required: true
         type: string
+      publish_to_npm:
+        description: "Publish the package to npm"
+        required: true
+        default: true
+        type: boolean
+      create_github_release:
+        description: "Create or update the GitHub Release"
+        required: true
+        default: true
+        type: boolean
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
 
 env:
   RELEASE_REF: ${{ github.event.inputs.tag || github.ref_name }}
+  RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
 
 jobs:
   publish:
+    if: ${{ github.event_name == 'push' || inputs.publish_to_npm }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,6 +52,9 @@ jobs:
 
       - name: Install
         run: npm ci
+
+      - name: Validate tag and version
+        run: node scripts/assert-release-version.mjs "${{ env.RELEASE_TAG }}"
 
       - name: Lint
         run: npm run lint
@@ -55,5 +74,73 @@ jobs:
       - name: Pack dry run
         run: npm pack --dry-run
 
+      - name: Build release notes
+        run: node scripts/extract-release-notes.mjs "${{ env.RELEASE_TAG }}" > .release-notes.md
+
+      - name: Pack release tarball
+        run: |
+          mkdir -p .release-artifacts
+          npm pack --pack-destination .release-artifacts
+
       - name: Publish
-        run: npm publish --access public
+        run: npm publish --provenance --access public
+
+  github-release:
+    if: >-
+      ${{
+        (github.event_name == 'push' || inputs.create_github_release) &&
+        (needs.publish.result == 'success' || needs.publish.result == 'skipped')
+      }}
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ env.RELEASE_REF }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Validate tag and version
+        run: node scripts/assert-release-version.mjs "${{ env.RELEASE_TAG }}"
+
+      - name: Build release notes
+        run: node scripts/extract-release-notes.mjs "${{ env.RELEASE_TAG }}" > .release-notes.md
+
+      - name: Build
+        run: npm run build
+
+      - name: Pack release tarball
+        run: |
+          mkdir -p .release-artifacts
+          npm pack --pack-destination .release-artifacts
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tarball_path=$(find .release-artifacts -name '*.tgz' -type f | head -n 1)
+
+          if [ -z "$tarball_path" ]; then
+            echo "Expected a packed tarball in .release-artifacts"
+            exit 1
+          fi
+
+          if gh release view "${{ env.RELEASE_TAG }}" >/dev/null 2>&1; then
+            gh release edit "${{ env.RELEASE_TAG }}" \
+              --title "${{ env.RELEASE_TAG }}" \
+              --notes-file .release-notes.md
+            gh release upload "${{ env.RELEASE_TAG }}" "$tarball_path" --clobber
+          else
+            gh release create "${{ env.RELEASE_TAG }}" "$tarball_path" \
+              --title "${{ env.RELEASE_TAG }}" \
+              --notes-file .release-notes.md \
+              --verify-tag
+          fi

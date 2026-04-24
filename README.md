@@ -15,6 +15,8 @@ A modern, zero-from-scratch PostCSS 8+ plugin that converts pixel units into vie
 npm install postcss-pixel-viewport postcss --save-dev
 ```
 
+Release process: see [docs/releasing.md](docs/releasing.md).
+
 ## Basic Usage
 
 ```js
